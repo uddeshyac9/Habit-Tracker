@@ -153,7 +153,7 @@ export default function Settings() {
                 <label className="block text-sm font-medium  mb-1">Reminder Time</label>
                 <input
                   type="time"
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  dark:text-white"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  "
                   value={settings.reminderTime}
                   onChange={(e) => handleChange("reminderTime", e.target.value)}
                 />
