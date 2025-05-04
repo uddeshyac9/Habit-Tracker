@@ -130,7 +130,7 @@ export default function Dashboard() {
             }`}
             onClick={() => setFilter("all")}
           >
-            All
+            Archive
           </button>
         </div>
 
@@ -154,13 +154,16 @@ export default function Dashboard() {
       {!loading && habits.length === 0 && (
         <div className="bg-white rounded-xl shadow p-8 text-center">
           <h3 className="text-xl font-semibold mb-2">No habits yet</h3>
+          
           <p className="text-gray-600 mb-4">Start tracking your habits by adding your first one</p>
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-            onClick={() => setOpen(true)}
-          >
-            Add Your First Habit
-          </button>
+          {filter === "active" && (
+      <button
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+        onClick={() => setOpen(true)}
+      >
+        Add Your First Habit
+      </button>
+    )}
         </div>
       )}
 

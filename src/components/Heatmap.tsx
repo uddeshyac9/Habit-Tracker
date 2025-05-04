@@ -1,8 +1,12 @@
+"use client"
+
 import CalendarHeatmap from "react-calendar-heatmap"
 import "react-calendar-heatmap/dist/styles.css"
-import { endOfToday, subMonths } from "date-fns"
+import "react-tooltip/dist/react-tooltip.css"
+import { endOfToday, subMonths, format } from "date-fns"
 import type { CheckinsMap } from "../utils/streak"
 import "../styles/heatmap.css"
+import { Tooltip } from "react-tooltip"
 
 export default function Heatmap({ checkins }: { checkins: CheckinsMap }) {
   const values = Object.keys(checkins).map((date) => ({
@@ -21,15 +25,23 @@ export default function Heatmap({ checkins }: { checkins: CheckinsMap }) {
           return value.count > 0 ? "color-filled" : "color-empty"
         }}
         gutterSize={2}
-        showWeekdayLabels={true}
+        showWeekdayLabels
         showOutOfRangeDays={false}
         tooltipDataAttrs={(value) => {
-          if (!value || !value.date) return null
+          if (!value || !value.date) {
+            // Cast to satisfy Record<string, string> signature
+            return {} as Record<string, string>
+          }
+          const date = new Date(value.date)
           return {
-            "data-tip": `${value.date}: ${value.count ? "Completed" : "Not completed"}`,
+            "data-tooltip-id": "habit-heatmap-tooltip",
+            "data-tooltip-content": `${format(date, "MMM d, yyyy")}: ${
+              value.count ? "Completed" : "Not completed"
+            }`,
           }
         }}
       />
+      <Tooltip id="habit-heatmap-tooltip" />
     </div>
   )
 }

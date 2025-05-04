@@ -2,11 +2,13 @@
 
 import { type ReactNode, useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
-import { Calendar, Home, Settings, LogOut, BarChart3, Menu, X } from "lucide-react"
+import { useTheme } from "../contexts/ThemeContext"
+import { Calendar, Home, Settings, LogOut, BarChart3, Menu, X, Moon, Sun } from "lucide-react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth()
+  const { darkMode, toggleDarkMode } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
@@ -30,7 +32,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-white flex transition-colors duration-200">
       {/* Mobile sidebar toggle */}
       <button
         onClick={toggleSidebar}
@@ -41,14 +43,29 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Sidebar */}
       <aside
-        className={`bg-white shadow-lg fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`bg-white dark:bg-gray-800 shadow-lg fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-5 border-b">
-            <h1 className="text-2xl font-bold text-blue-600">HabitVault</h1>
-            <p className="text-sm text-gray-500 mt-1 truncate">{user?.email}</p>
+          <div className="p-5 border-b dark:border-gray-700 flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">HabitVault</h1>
+              <p className="text-sm text-gray-500  mt-1 truncate">{user?.email}</p>
+            </div>
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? (
+                <Moon size={20} className="text-gray-600 dark:text-gray-400" />
+               
+              ) : (
+                <Sun size={20} className="text-yellow-400" />
+                
+              )}
+            </button>
           </div>
 
           <nav className="flex-1 p-4 space-y-1">
@@ -59,7 +76,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                   key={item.name}
                   to={item.href}
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-100"
+                    isActive
+                      ? "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -70,10 +89,10 @@ export default function Layout({ children }: { children: ReactNode }) {
             })}
           </nav>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t dark:border-gray-700">
             <button
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+              className="flex items-center w-full px-4 py-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
               <LogOut size={20} className="mr-3" />
               <span>Logout</span>
