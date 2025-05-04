@@ -1,6 +1,5 @@
 @import "tailwindcss";
-.input{ @apply w-full mb-3 p-2 border rounded focus:outline-none focus:ring; }
-.btn-primary{ @apply bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition; }
+
 .color-empty { fill: #eee; }
 .color-git { fill: #16a34a; }
 
@@ -8,58 +7,88 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 249, 250, 251;
 }
-/*
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 17, 24, 39;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.dark .bg-white {
+  background-color: rgb(31, 41, 55);
+  color: rgb(229, 231, 235);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.dark .bg-gray-50 {
+  background-color: rgb(17, 24, 39);
+  color: rgb(229, 231, 235);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+.dark .text-gray-800 {
+  color: rgb(229, 231, 235);
+}
+
+.dark .text-gray-700 {
+  color: rgb(209, 213, 219);
+}
+
+.dark .text-gray-600 {
+  color: rgb(156, 163, 175);
+}
+
+.dark .text-gray-500 {
+  color: rgb(107, 114, 128);
+}
+
+.dark .border {
+  border-color: rgb(75, 85, 99);
+}
+
+.dark .border-t,
+.dark .border-b {
+  border-color: rgb(75, 85, 99);
+}
+
+.dark .bg-gray-200 {
+  background-color: rgb(75, 85, 99);
+}
+
+.dark .bg-gray-100 {
+  background-color: rgb(55, 65, 81);
+}
+
+.dark .shadow,
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg {
+  --tw-shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark .react-calendar-heatmap .color-empty {
+  fill: rgb(55, 65, 81);
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors;
+}
+
+.input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white mb-4;
+}
+
+/* Tooltip styles */
+.__react_component_tooltip {
+  @apply text-xs py-1 px-2 ;
+}
+
+.dark .__react_component_tooltip {
+  @apply bg-gray-800 text-white ;
+}

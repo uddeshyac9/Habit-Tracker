@@ -1,0 +1,22 @@
+.react-calendar-heatmap .color-empty {
+    fill: #f3f4f6;
+  }
+  
+  .react-calendar-heatmap .color-filled {
+    fill: #4f46e5;
+  }
+  
+  .heatmap-container {
+    margin-top: 8px;
+  }
+  
+  .react-calendar-heatmap text {
+    font-size: 8px;
+    fill: #9ca3af;
+  }
+  
+  .react-calendar-heatmap rect:hover {
+    stroke: #6b7280;
+    stroke-width: 1px;
+  }
+  
