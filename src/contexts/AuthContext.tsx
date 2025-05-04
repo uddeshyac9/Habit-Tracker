@@ -1,49 +1,70 @@
+// @refresh reload
+"use client"
+
 import {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    ReactNode,
-  } from 'react'
-  import {
-    User,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-  } from 'firebase/auth'
-  import { auth } from '../firebase'
-  
-  type AuthCtx = {
-    user: User | null
-    login: (e: string, p: string) => Promise<void>
-    register: (e: string, p: string) => Promise<void>
-    logout: () => Promise<void>
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react"
+import {
+  User,
+  UserCredential,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth"
+import { auth } from "../firebase"
+
+type AuthCtx = {
+  user: User | null
+  login: (email: string, password: string) => Promise<UserCredential>
+  register: (email: string, password: string) => Promise<UserCredential>
+  logout: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthCtx | undefined>(undefined)
+
+export function useAuth(): AuthCtx {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider")
+  return ctx
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u)
+      setLoading(false)
+    })
+    return unsub
+  }, [])
+
+  // Now correctly typed to return UserCredential
+  const login = (email: string, password: string) =>
+    signInWithEmailAndPassword(auth, email, password)
+
+  const register = (email: string, password: string) =>
+    createUserWithEmailAndPassword(auth, email, password)
+
+  const logout = () => signOut(auth)
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-100">
+        <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-blue-600" />
+      </div>
+    )
   }
-  
-  const C = createContext<AuthCtx | null>(null)
-  export const useAuth = () => useContext(C)!
-  
-  export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
-  
-    useEffect(() => {
-      const unsub = onAuthStateChanged(auth, u => {
-        setUser(u)
-        setLoading(false)
-      })
-      return unsub
-    }, [])
-  
-    const value: AuthCtx = {
-      user,
-      login: (e, p) => signInWithEmailAndPassword(auth, e, p).then(),
-      register: (e, p) => createUserWithEmailAndPassword(auth, e, p).then(),
-      logout: () => signOut(auth),
-    }
-  
-    if (loading) return <div className="h-screen w-screen grid place-content-center">Loading…</div>
-    return <C.Provider value={value}>{children}</C.Provider>
-  }
-  
+
+  return (
+    <AuthContext.Provider value={{ user, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
